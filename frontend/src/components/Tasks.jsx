@@ -29,7 +29,7 @@ const Tasks = () => {
       case 'pending':
         return !task.completed;
       case 'overdue':
-        return !task.completed && taskDate < today;
+        return !task.completed && taskDate <= today;
       default:
         return true;
     }
@@ -139,7 +139,7 @@ const Tasks = () => {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
-                const isOverdue = !task.completed && taskDate < today;
+                const isOverdue = !task.completed && taskDate <= today;
 
                 return (
                   <div
