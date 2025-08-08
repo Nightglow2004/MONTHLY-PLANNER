@@ -11,7 +11,10 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://monthly-planner-phi.vercel.app', // Your Vercel frontend URL
+}));
+
 app.use(express.json());
 
 // Routes
