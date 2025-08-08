@@ -1,4 +1,3 @@
-// frontend/src/components/Tasks.jsx
 import React, { useState } from 'react';
 import { useTasks } from '../hooks/useTasks';
 import { getCurrentMonth, getMonthName, formatDate } from '../utils/dateUtils';
@@ -6,7 +5,7 @@ import { getCurrentMonth, getMonthName, formatDate } from '../utils/dateUtils';
 const Tasks = () => {
   const { year, month } = getCurrentMonth();
   const { tasks, loading, addTask, updateTask, deleteTask } = useTasks(year, month);
-  const [filter, setFilter] = useState('all'); // all, completed, pending, overdue
+  const [filter, setFilter] = useState('all');
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [newTask, setNewTask] = useState({
@@ -19,8 +18,11 @@ const Tasks = () => {
 
   const filteredTasks = tasks.filter(task => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const taskDate = new Date(task.date);
-    
+    taskDate.setHours(0, 0, 0, 0);
+
     switch (filter) {
       case 'completed':
         return task.completed;
@@ -87,7 +89,6 @@ const Tasks = () => {
   return (
     <div className="flex-1 p-6 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Tasks</h1>
@@ -123,7 +124,7 @@ const Tasks = () => {
           ))}
         </div>
 
-        {/* Tasks List */}
+        {/* Task List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200">
           {filteredTasks.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -132,8 +133,14 @@ const Tasks = () => {
           ) : (
             <div className="divide-y divide-gray-200">
               {filteredTasks.map(task => {
-                const isOverdue = !task.completed && new Date(task.date) < new Date();
-                
+                const taskDate = new Date(task.date);
+                taskDate.setHours(0, 0, 0, 0);
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const isOverdue = !task.completed && taskDate < today;
+
                 return (
                   <div
                     key={task._id}
